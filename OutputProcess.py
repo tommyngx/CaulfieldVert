@@ -229,7 +229,7 @@ def draw_boxes2(filename, v_boxes, v_labels, v_scores, v_colors):
 def draw_boxes3(filename, v_boxes, v_labels, v_scores, v_colors):
     v_colors=['#F657C6','#9BEC1C','#DE1F55','#FADD3A','#A2E24D','#CA0F3B','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD']
     img = cv2.imread(filename)
-    print(v_boxes[1])
+    #print(v_boxes[1])
     for i in range(len(v_boxes)):
         labels =['Vertebra','Abnormal','Spine','Sacrum']
         i2 = labels.index(v_labels[i])
@@ -261,3 +261,37 @@ def draw_boxes3(filename, v_boxes, v_labels, v_scores, v_colors):
         #                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
     cv2.imwrite("result.jpg",img)
     cv2_imshow(img)
+
+def crop_boxes4(filename, v_boxes, v_labels, v_scores, v_colors):
+    v_colors=['#F657C6','#9BEC1C','#DE1F55','#FADD3A','#A2E24D','#CA0F3B','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD']
+    img = cv2.imread(filename)
+    labelshow=[]
+    for i in range(len(v_boxes)):
+        labels =['Vertebra','Abnormal','Spine','Sacrum']
+        i2 = labels.index(v_labels[i])
+        box = v_boxes[i]
+        y1, x1, y2, x2 = box.ymin, box.xmin, box.ymax, box.xmax
+        width, height = x2 - x1, y2 - y1
+        label = "%s:%.0f" % (v_labels[i], v_scores[i]) + "%"
+        if i2==1:
+          labelshow.append("%s:%.0f" % (v_labels[i], v_scores[i]) + "%")
+          crop = img[y1:y2, x1:x2]
+          cv2.imwrite("crop_{}.jpg".format(i), crop)
+        if i2==0:
+          #print("Đốt Xương {}".format(i))
+          labelshow.append("%s:%.0f" % (v_labels[i], v_scores[i]) + "%")
+          crop2 = img[y1:y2, x1:x2]
+          cv2.imwrite("crop_{}.jpg".format(i), crop2)
+
+    fig = plt.figure(figsize=(25, 8))
+    columns = 5
+    rows = 2
+    for i in range(1, len(labelshow)):
+        img = cv2.imread("crop_{}.jpg".format(i))
+        i2=i-1
+        fig.add_subplot(rows, columns, i).set_title('{}'.format(labelshow[i2]))
+        plt.rc('font', size=15) 
+        plt.imshow(img)
+        plt.axis('off')
+    plt.show()
+
