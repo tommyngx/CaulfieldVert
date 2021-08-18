@@ -7,6 +7,7 @@ from google.colab.patches import cv2_imshow
 from PIL import ImageColor
 import colorsys
 import random
+import matplotlib.pyplot as plt
 
 
 input_w, input_h = 416, 416
