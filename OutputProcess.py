@@ -284,14 +284,17 @@ def crop_boxes4(filename, v_boxes, v_labels, v_scores, v_colors):
           crop2 = img[y1:y2, x1:x2]
           cv2.imwrite("crop_{}.jpg".format(i), crop2)
 
-    fig = plt.figure(figsize=(25, 8))
-    columns = 5
-    rows = 2
+    fig = plt.figure(figsize=(25, 12))
+    columns = 4
+    rows = 3
     for i in range(1, len(labelshow)+1):
         img = cv2.imread("crop_{}.jpg".format(i-1))
         i2=i-1
         plt.rc('font', size=15) 
-        fig.add_subplot(rows, columns, i).set_title('{}'.format(labelshow[i2]))
+        if labelshow[i2][0]=="V":
+          fig.add_subplot(rows, columns, i).set_title('{}'.format(labelshow[i2]), color='r')
+        elif labelshow[i2][0]=="A":
+          fig.add_subplot(rows, columns, i).set_title('{}'.format(labelshow[i2]), color='g')
         plt.imshow(img)
         plt.axis('off')
     plt.show()
