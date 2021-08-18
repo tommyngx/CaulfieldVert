@@ -41,12 +41,13 @@ def load_image_pixels(filename, shape):
 def load_image_pixels2(filename, shape):
     image = load_img(filename)
     width, height = image.size
-    image = load_img(filename, interpolation = 'bilinear', target_size=shape)
-    image = preVert_go(image)
+    image = preVert_go(filename)
+    cv2.imwrite("temp.jpg",image)
+    image = load_img("temp.jpg", interpolation = 'bilinear', target_size=shape)
     image = img_to_array(image)
     image = image.astype('float32')
     image /= 255.0
-    image = expand_dims(image, 0)    
+    image = expand_dims(image, 0)   
     return image, width, height
 
 
@@ -258,13 +259,13 @@ def preVert(image_path, output_home):
     output_dir = output_home # os.path.join(output_home, basename)
     cv2.imwrite(output_home, clahe)
 
-def preVert_go(img_path):
+def preVert_go(image_path):
     i = 0#1
     limit = 2.0
         
-    image_path = os.path.join(image_dir, f)   
+    #image_path = os.path.join(image_dir, f)   
     img = cv2.imread(image_path)
-
+    img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
     img_y_cr_cb = cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb)
     y, cr, cb = cv2.split(img_y_cr_cb)
     img_eq = cv2.equalizeHist(y)
