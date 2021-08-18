@@ -290,8 +290,8 @@ def crop_boxes4(filename, v_boxes, v_labels, v_scores, v_colors):
     for i in range(1, len(labelshow)+1):
         img = cv2.imread("crop_{}.jpg".format(i-1))
         i2=i-1
-        fig.add_subplot(rows, columns, i).set_title('{}'.format(labelshow[i2]))
         plt.rc('font', size=15) 
+        fig.add_subplot(rows, columns, i).set_title('{}'.format(labelshow[i2]))
         plt.imshow(img)
         plt.axis('off')
     plt.show()
