@@ -233,7 +233,7 @@ def draw_boxes3(filename, v_boxes, v_labels, v_scores, v_colors):
     for i in range(len(v_boxes)):
         labels =['Vertebra','Abnormal','Spine','Sacrum']
         i2 = labels.index(v_labels[i])
-        print(i2)
+        #print(i2)
         box = v_boxes[i]
         y1, x1, y2, x2 = box.ymin, box.xmin, box.ymax, box.xmax
         width, height = x2 - x1, y2 - y1
