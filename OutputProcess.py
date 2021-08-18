@@ -231,6 +231,7 @@ def draw_boxes3(filename, v_boxes, v_labels, v_scores, v_colors):
     img = cv2.imread(filename)
     print(v_boxes[1])
     for i in range(len(v_boxes)):
+        labels =['Vertebra','Abnormal','Spine','Sacrum']
         i2 = labels.index(v_labels[i])
         print(i2)
         box = v_boxes[i]
