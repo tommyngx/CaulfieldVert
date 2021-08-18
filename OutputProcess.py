@@ -35,7 +35,6 @@ class BoundBox:
         return self.score
  
 def _sigmoid(x):
-    x= float(x)
     return 1. / (1. + np.exp(-x))
  
 def decode_netout(netout, anchors, obj_thresh, net_h, net_w, nb_box, scales_x_y):
