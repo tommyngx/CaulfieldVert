@@ -271,6 +271,7 @@ def crop_boxes4(filename, v_boxes, v_labels, v_scores, v_colors):
     v_colors=['#F657C6','#9BEC1C','#DE1F55','#FADD3A','#A2E24D','#CA0F3B','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD']
     img = cv2.imread(filename)
     labelshow=[]
+    k=0
     for i in range(len(v_boxes)):
         labels =['Vertebra','Abnormal','Spine','Sacrum']
         i2 = labels.index(v_labels[i])
@@ -281,16 +282,18 @@ def crop_boxes4(filename, v_boxes, v_labels, v_scores, v_colors):
         if i2==1:
           labelshow.append("%s:%.0f" % (v_labels[i], v_scores[i]) + "%")
           crop = img[y1:y2, x1:x2]
-          cv2.imwrite("crop_{}.jpg".format(i), crop)
+          cv2.imwrite("crop_{}.jpg".format(k), crop)
+          k=k+1
         if i2==0:
           #print("Đốt Xương {}".format(i))
           labelshow.append("%s:%.0f" % (v_labels[i], v_scores[i]) + "%")
           crop2 = img[y1:y2, x1:x2]
-          cv2.imwrite("crop_{}.jpg".format(i), crop2)
+          cv2.imwrite("crop_{}.jpg".format(k), crop2)
+          k=k+1
 
     fig = plt.figure(figsize=(25, 12))
     columns = 4
-    rows = 3
+    rows = 4
     for i in range(1, len(labelshow)+1):
         img = cv2.imread("crop_{}.jpg".format(i-1))
         i2=i-1
@@ -307,6 +310,7 @@ def crop_vert_calibrate(filename, v_boxes, v_labels, v_scores, percentreduce):
     v_colors=['#F657C6','#9BEC1C','#DE1F55','#FADD3A','#A2E24D','#CA0F3B','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD']
     img = cv2.imread(filename)
     labelshow=[]
+    k=0
     for i in range(len(v_boxes)):
         labels =['Vertebra','Abnormal','Spine','Sacrum']
         i2 = labels.index(v_labels[i])
@@ -316,19 +320,21 @@ def crop_vert_calibrate(filename, v_boxes, v_labels, v_scores, percentreduce):
         label = "%s:%.0f" % (v_labels[i], v_scores[i]) + "%"
         if i2==1:
           labelshow.append("%s:%.0f" % (v_labels[i], v_scores[i]) + "%")
-          y1,y2 = percentreduce*y1, percentreduce*y2
+          y1,y2 = int(percentreduce*y1), int(y2)
           crop = img[y1:y2, x1:x2]
-          cv2.imwrite("crop_{}.jpg".format(i), crop)
+          cv2.imwrite("crop_{}.jpg".format(k), crop)
+          k=k+1
         if i2==0:
           #print("Đốt Xương {}".format(i))
           labelshow.append("%s:%.0f" % (v_labels[i], v_scores[i]) + "%")
-          y1,y2 = percentreduce*y1, percentreduce*y2
+          y1,y2 = int(percentreduce*y1), int(y2)
           crop2 = img[y1:y2, x1:x2]
-          cv2.imwrite("crop_{}.jpg".format(i), crop2)
+          cv2.imwrite("crop_{}.jpg".format(k), crop2)
+          k=k+1
 
     fig = plt.figure(figsize=(25, 12))
     columns = 4
-    rows = 3
+    rows = 4
     for i in range(1, len(labelshow)+1):
         img = cv2.imread("crop_{}.jpg".format(i-1))
         i2=i-1
@@ -377,5 +383,39 @@ def show_vertebral(link, size_reduce):
   draw_boxes3('temp.jpg', v_boxes_rs, v_labels, v_scores, v_colors)
   crop_boxes4('temp.jpg', v_boxes_rs, v_labels, v_scores, v_colors)
 
+def show_vertebral_calibrate(link, size_reduce, percentreduce):
+  labels =['Vertebra','Abnormal','Spine','Sacrum']
+
+  # Bước 1: Đọc ảnh, xử lý
+  #from PIL import Image
+  basewidth = size_reduce
+  #img = Image.open('/content/tommy/PHASE2_21_51/1/1338.jpg')
+  img= Image.open(link)
+  wpercent = (basewidth/float(img.size[0]))
+  hsize = int((float(img.size[1])*float(wpercent)))
+  img = img.resize((basewidth,hsize), Image.ANTIALIAS)
+  img.save('somepic.jpg')
+
+  photo_filename = 'somepic.jpg'
+  image, image_w, image_h = load_image_pixels2(photo_filename, (input_w, input_h))
+
+  # Bước 2: Cho qua YOLO DNN
+  model = YOLOV41() # Tạo
+  wr = WeightReader('Vert5class.weights')  # Đọc w
+  wr.load_weights(model) # Load vào model
+  yhat = model.predict(image)
+
+  # Bước 3: Xử lý đầu ra của DNN YOLO --> Kết quả
+  boxes = yolo_boxes(yhat)   
+  boxes = correct_yolo_boxes(boxes, image_h, image_w, input_h, input_w)  
+  rs_boxes = do_nms(boxes, 0.5) 
+  class_threshold = 0.8
+  colors = generate_colors(labels)
+  v_boxes_rs, v_labels, v_scores, v_colors = get_boxes(boxes, labels, class_threshold, colors) 
+
+  # Bước 4: Vis kết quả
+  #draw_boxes3(photo_filename, v_boxes_rs, v_labels, v_scores, v_colors)
+  draw_boxes3('temp.jpg', v_boxes_rs, v_labels, v_scores, v_colors)
+  crop_vert_calibrate('temp.jpg', v_boxes_rs, v_labels, v_scores, percentreduce)
 
 
