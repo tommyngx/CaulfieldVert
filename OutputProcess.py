@@ -431,11 +431,9 @@ def draw_boxes_calibrate(filename, v_boxes, v_labels, v_scores, percentreduce):
         width, height = x2 - x1, y2 - y1
         label = "%s:%.0f" % (v_labels[i], v_scores[i]) + "%"
         if i2==1:
-          labelshow.append("%s:%.0f" % (v_labels[i], v_scores[i]) + "%")
           y1,y2 = int(percentreduce*y1), int(y2)
         if i2==0:
           #print("Đốt Xương {}".format(i))
-          labelshow.append("%s:%.0f" % (v_labels[i], v_scores[i]) + "%")
           y1,y2 = int(percentreduce*y1), int(y2)
         # For bounding box
         # For the text background
