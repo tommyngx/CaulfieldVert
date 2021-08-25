@@ -252,7 +252,7 @@ def draw_boxes3(filename, v_boxes, v_labels, v_scores, v_colors):
         color2 = v_colors[i2]
         color2 = ImageColor.getcolor(color2, "RGB")
         color2=tuple(reversed(color2))
-        img = cv2.rectangle(img, (x1, y1), (x2, y2), color2, 1)
+        img = cv2.rectangle(img, (x1, y1), (x2, y2), color2, 2) # 1 ori => 2
         # Finds space required by the text so that we can put a background with that amount of width.
         
         (w, h), _ = cv2.getTextSize(
@@ -264,7 +264,7 @@ def draw_boxes3(filename, v_boxes, v_labels, v_scores, v_colors):
         text_color2 = ImageColor.getcolor(text_color, "RGB")
         text_color2 = complement(*text_color2)
         img = cv2.putText(img, label, (x1, y1 - 4),
-                            cv2.FONT_HERSHEY_DUPLEX,0.77, text_color2, 1,cv2.LINE_AA)
+                            cv2.FONT_HERSHEY_DUPLEX,0.77, text_color2, 2,cv2.LINE_AA),# 1 ori => 2
         # For printing text
         #img = cv2.putText(img, label, (x1, y1),
         #                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
@@ -519,19 +519,19 @@ def draw_boxes_calibrate(filename, v_boxes, v_labels, v_scores, percentreduce):
         color2 = v_colors[i2]
         color2 = ImageColor.getcolor(color2, "RGB")
         color2=tuple(reversed(color2))
-        img = cv2.rectangle(img, (x1, y1), (x2, y2), color2, 1)
+        img = cv2.rectangle(img, (x1, y1), (x2, y2), color2, 2)# 1 ori => 2
         # Finds space required by the text so that we can put a background with that amount of width.
         
         (w, h), _ = cv2.getTextSize(
                 label, cv2.FONT_HERSHEY_SIMPLEX, 0.8, 1)
 
         # Prints the text. 
-        img = cv2.rectangle(img, (x1, y1-25), (x1 + w, y1), color2, -1)
+        img = cv2.rectangle(img, (x1, y1-25), (x1 + w, y1), color2, -1) 
         text_color=v_colors[i2]
         text_color2 = ImageColor.getcolor(text_color, "RGB")
         text_color2 = complement(*text_color2)
         img = cv2.putText(img, label, (x1, y1 - 4),
-                            cv2.FONT_HERSHEY_DUPLEX,0.77, text_color2, 1,cv2.LINE_AA)
+                            cv2.FONT_HERSHEY_DUPLEX,0.77, text_color2, 2,cv2.LINE_AA) # 1 ori => 2
         # For printing text
         #img = cv2.putText(img, label, (x1, y1),
         #                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
@@ -564,7 +564,7 @@ def draw_boxes_calibrate2(filename, v_boxes, v_labels, v_scores, percentreduce, 
         color2 = v_colors[i2]
         color2 = ImageColor.getcolor(color2, "RGB")
         color2=tuple(reversed(color2))
-        img = cv2.rectangle(img, (x1, y1), (x2, y2), color2, 1)
+        img = cv2.rectangle(img, (x1, y1), (x2, y2), color2, 2)# 1 ori => 2
         # Finds space required by the text so that we can put a background with that amount of width.
         
         (w, h), _ = cv2.getTextSize(
@@ -576,7 +576,7 @@ def draw_boxes_calibrate2(filename, v_boxes, v_labels, v_scores, percentreduce, 
         text_color2 = ImageColor.getcolor(text_color, "RGB")
         text_color2 = complement(*text_color2)
         img = cv2.putText(img, label, (x1, y1 - 4),
-                            cv2.FONT_HERSHEY_DUPLEX,0.77, text_color2, 1,cv2.LINE_AA)
+                            cv2.FONT_HERSHEY_DUPLEX,0.77, text_color2, 2,cv2.LINE_AA)# 1 ori => 2
         # For printing text
         #img = cv2.putText(img, label, (x1, y1),
         #                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
