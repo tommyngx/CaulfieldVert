@@ -392,6 +392,41 @@ def show_vertebral(link, size_reduce):
   draw_boxes3('temp.jpg', v_boxes_rs, v_labels, v_scores, v_colors)
   crop_boxes4('temp.jpg', v_boxes_rs, v_labels, v_scores, v_colors)
 
+def show_vertebralX(link, size_reduce):
+  labels =['Vertebra','Abnormal','Spine','Sacrum']
+
+  # Bước 1: Đọc ảnh, xử lý
+  #from PIL import Image
+  basewidth = size_reduce
+  #img = Image.open('/content/tommy/PHASE2_21_51/1/1338.jpg')
+  img= Image.open(link)
+  wpercent = (basewidth/float(img.size[0]))
+  hsize = int((float(img.size[1])*float(wpercent)))
+  img = img.resize((basewidth,hsize), Image.ANTIALIAS)
+  img.save('somepic.jpg')
+
+  photo_filename = 'somepic.jpg'
+  image, image_w, image_h = load_image_pixels2(photo_filename, (input_w, input_h))
+
+  # Bước 2: Cho qua YOLO DNN
+  model = YOLOV41() # Tạo
+  wr = WeightReader('Vert5class.weights')  # Đọc w
+  wr.load_weights(model) # Load vào model
+  yhat = model.predict(image)
+
+  # Bước 3: Xử lý đầu ra của DNN YOLO --> Kết quả
+  boxes = yolo_boxes(yhat)   
+  boxes = correct_yolo_boxes(boxes, image_h, image_w, input_h, input_w)  
+  rs_boxes = do_nms(boxes, 0.5) 
+  class_threshold = 0.5
+  colors = generate_colors(labels)
+  v_boxes_rs, v_labels, v_scores, v_colors = get_boxes(boxes, labels, class_threshold, colors) 
+
+  # Bước 4: Vis kết quả
+  #draw_boxes3(photo_filename, v_boxes_rs, v_labels, v_scores, v_colors)
+  draw_boxes33('temp.jpg', v_boxes_rs, v_labels, v_scores, v_colors)
+  crop_boxes4('temp.jpg', v_boxes_rs, v_labels, v_scores, v_colors)
+
 def show_vertebral_ori(link, size_reduce):
   labels =['Vertebra','Abnormal','Spine','Sacrum']
 
@@ -498,7 +533,7 @@ def show_vertebral_calibrate2(link, size_reduce, percentreduce,percentreuduce2):
   crop_vert_calibrate2('temp.jpg', v_boxes_rs, v_labels, v_scores, percentreduce, percentreuduce2)
 
 def draw_boxes_calibrate(filename, v_boxes, v_labels, v_scores, percentreduce):
-    v_colors=['#F657C6','#9BEC1C','#DE1F55','#FADD3A','#A2E24D','#CA0F3B','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD']
+    v_colors=['#F657C6','#9BEC1C','#00B2FF','#FADD3A','#A2E24D','#CA0F3B','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD']
     img = cv2.imread(filename)
     #print(v_boxes[1])
     for i in range(len(v_boxes)):
@@ -542,8 +577,46 @@ def draw_boxes_calibrate(filename, v_boxes, v_labels, v_scores, percentreduce):
     plt.axis('off')
     plt.show()
 
+def draw_boxes33(filename, v_boxes, v_labels, v_scores, v_colors):
+    v_colors=['#F657C6','#9BEC1C','#00B2FF','#FADD3A','#A2E24D','#CA0F3B','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD']
+    img = cv2.imread(filename)
+    #print(v_boxes[1])
+    for i in range(len(v_boxes)):
+        labels =['Vertebra','Abnormal','Spine','Sacrum']
+        i2 = labels.index(v_labels[i])
+        #print(i2)
+        box = v_boxes[i]
+        y1, x1, y2, x2 = box.ymin, box.xmin, box.ymax, box.xmax
+        width, height = x2 - x1, y2 - y1
+        label = "%s:%.0f" % (v_labels[i], v_scores[i]) + "%"
+        # For bounding box
+        # For the text background
+        color2 = v_colors[i2]
+        color2 = ImageColor.getcolor(color2, "RGB")
+        color2=tuple(reversed(color2))
+        img = cv2.rectangle(img, (x1, y1), (x2, y2), color2, 3) #
+        # Finds space required by the text so that we can put a background with that amount of width.
+        
+        (w, h), _ = cv2.getTextSize(
+                label, cv2.FONT_HERSHEY_SIMPLEX, 1.8, 2)
+
+        # Prints the text. 
+        img = cv2.rectangle(img, (x1, y1-50), (x1 + w, y1), color2, -1)
+        text_color="#000000"#v_colors[i2]
+        text_color2 = ImageColor.getcolor(text_color, "RGB")
+        #text_color2 = complement(*text_color2)
+        img = cv2.putText(img, label, (x1, y1 - 4),
+                            cv2.FONT_HERSHEY_DUPLEX,1.77, text_color2, 2,cv2.LINE_AA)
+
+    cv2.imwrite("result.jpg",img)
+    #cv2_imshow(img)
+    fig = plt.figure(figsize=(10, 10))
+    plt.imshow(cv2.cvtColor(cv2.imread("result.jpg"), cv2.COLOR_BGR2RGB))
+    plt.axis('off')
+    plt.show()
+
 def draw_boxes_calibrate2(filename, v_boxes, v_labels, v_scores, percentreduce, percentreuduce2):
-    v_colors=['#F657C6','#9BEC1C','#DE1F55','#FADD3A','#A2E24D','#CA0F3B','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD']
+    v_colors=['#F657C6','#9BEC1C','#00B2FF','#FADD3A','#A2E24D','#CA0F3B','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD']
     img = cv2.imread(filename)
     #print(v_boxes[1])
     for i in range(len(v_boxes)):
@@ -568,15 +641,15 @@ def draw_boxes_calibrate2(filename, v_boxes, v_labels, v_scores, percentreduce, 
         # Finds space required by the text so that we can put a background with that amount of width.
         
         (w, h), _ = cv2.getTextSize(
-                label, cv2.FONT_HERSHEY_SIMPLEX, 0.8, 1)
+                label, cv2.FONT_HERSHEY_SIMPLEX, 1.8, 2)
 
         # Prints the text. 
-        img = cv2.rectangle(img, (x1, y1-25), (x1 + w, y1), color2, -1)
-        text_color=v_colors[i2]
+        img = cv2.rectangle(img, (x1, y1-50), (x1 + w, y1), color2, -1)
+        text_color="#000000"#v_colors[i2]
         text_color2 = ImageColor.getcolor(text_color, "RGB")
         text_color2 = complement(*text_color2)
         img = cv2.putText(img, label, (x1, y1 - 4),
-                            cv2.FONT_HERSHEY_DUPLEX,0.77, text_color2, 1,cv2.LINE_AA)
+                            cv2.FONT_HERSHEY_DUPLEX,1.77, text_color2, 2,cv2.LINE_AA)
         # For printing text
         #img = cv2.putText(img, label, (x1, y1),
         #                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
