@@ -230,9 +230,8 @@ def draw_boxes2(filename, v_boxes, v_labels, v_scores, v_colors):
         #                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
     cv2.imwrite("result.jpg",img)
     #cv2_imshow(img)
-    img=cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    fig = plt.figure(figsize=(10, 5))
-    plt.imshow(img)
+    fig = plt.figure(figsize=(10, 10))
+    plt.imshow(cv2.cvtColor(cv2.imread("result.jpg"), cv2.COLOR_BGR2RGB))
     plt.axis('off')
     plt.show()
 
@@ -272,7 +271,7 @@ def draw_boxes3(filename, v_boxes, v_labels, v_scores, v_colors):
     cv2.imwrite("result.jpg",img)
     #cv2_imshow(img)
     fig = plt.figure(figsize=(10, 10))
-    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.imshow(cv2.cvtColor(cv2.imread("result.jpg"), cv2.COLOR_BGR2RGB))
     plt.axis('off')
     plt.show()
 
@@ -539,7 +538,7 @@ def draw_boxes_calibrate(filename, v_boxes, v_labels, v_scores, percentreduce):
     cv2.imwrite("result.jpg",img)
     #cv2_imshow(img)
     fig = plt.figure(figsize=(10, 10))
-    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.imshow(cv2.cvtColor(cv2.imread("result.jpg"), cv2.COLOR_BGR2RGB))
     plt.axis('off')
     plt.show()
 
@@ -584,7 +583,7 @@ def draw_boxes_calibrate2(filename, v_boxes, v_labels, v_scores, percentreduce, 
     cv2.imwrite("result.jpg",img)
     #cv2_imshow(img)
     fig = plt.figure(figsize=(10, 10))
-    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.imshow(cv2.cvtColor(cv2.imread("result.jpg"), cv2.COLOR_BGR2RGB))
     plt.axis('off')
     plt.show()
 
