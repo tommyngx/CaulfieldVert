@@ -528,7 +528,11 @@ def draw_boxes_calibrate(filename, v_boxes, v_labels, v_scores, percentreduce):
         #img = cv2.putText(img, label, (x1, y1),
         #                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
     cv2.imwrite("result.jpg",img)
-    cv2_imshow(img)
+    #cv2_imshow(img)
+    fig = plt.figure(figsize=(25, 12))
+    plt.imshow(img)
+    plt.axis('off')
+    plt.show()
 
 def draw_boxes_calibrate2(filename, v_boxes, v_labels, v_scores, percentreduce, percentreuduce2):
     v_colors=['#F657C6','#9BEC1C','#DE1F55','#FADD3A','#A2E24D','#CA0F3B','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD']
@@ -569,7 +573,11 @@ def draw_boxes_calibrate2(filename, v_boxes, v_labels, v_scores, percentreduce, 
         #img = cv2.putText(img, label, (x1, y1),
         #                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
     cv2.imwrite("result.jpg",img)
-    cv2_imshow(img)
+    #cv2_imshow(img)
+    fig = plt.figure(figsize=(25, 12))
+    plt.imshow(img)
+    plt.axis('off')
+    plt.show()
 
 def crop_vert_calibrate2(filename, v_boxes, v_labels, v_scores, percentreduce, percentreuduce2):
     v_colors=['#F657C6','#9BEC1C','#DE1F55','#FADD3A','#A2E24D','#CA0F3B','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD','#DE1F55',"#F0326A","#CAFD65", '#3CC983','#4600CD']
