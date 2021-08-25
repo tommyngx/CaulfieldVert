@@ -280,3 +280,10 @@ def preVert_go(image_path):
     #cv2.imwrite(output_home, clahe)
     return clahe
 
+def gamma_correction2(img, gamma):
+    for i in range(img.shape[0]):
+        for j in range(img.shape[1]):
+          for n in range(3):
+            img[i][j][n] = ((int(img[i][j][n])/255.0) ** gamma)*255
+    return img
+    

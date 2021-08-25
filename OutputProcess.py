@@ -637,7 +637,7 @@ def draw_boxes_calibrate2(filename, v_boxes, v_labels, v_scores, percentreduce, 
         color2 = v_colors[i2]
         color2 = ImageColor.getcolor(color2, "RGB")
         color2=tuple(reversed(color2))
-        img = cv2.rectangle(img, (x1, y1), (x2, y2), color2, 1)
+        img = cv2.rectangle(img, (x1, y1), (x2, y2), color2, 3)
         # Finds space required by the text so that we can put a background with that amount of width.
         
         (w, h), _ = cv2.getTextSize(
