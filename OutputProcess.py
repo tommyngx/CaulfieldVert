@@ -416,8 +416,8 @@ def show_vertebral_ori(link, size_reduce):
 
   # Bước 4: Vis kết quả
   #draw_boxes3(photo_filename, v_boxes_rs, v_labels, v_scores, v_colors)
-  draw_boxes3(link, v_boxes_rs, v_labels, v_scores, v_colors)
-  crop_boxes4(link, v_boxes_rs, v_labels, v_scores, v_colors)
+  draw_boxes3('somepic.jpg', v_boxes_rs, v_labels, v_scores, v_colors)
+  crop_boxes4('somepic.jpg', v_boxes_rs, v_labels, v_scores, v_colors)
 
 def show_vertebral_calibrate(link, size_reduce, percentreduce):
   labels =['Vertebra','Abnormal','Spine','Sacrum']
