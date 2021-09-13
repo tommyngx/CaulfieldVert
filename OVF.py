@@ -387,7 +387,7 @@ def draw_boxes_label2(filename, filename2, v_boxes, v_labels, v_scores, percentr
     ax[1].imshow(readrgb('preprocess.jpg'))
     ax[1].set_title('Object Detection YOLO4')
     ax[2].imshow(readrgb('result.jpg'))
-    ax[2].set_title('Labelling & Dignoses')
+    ax[2].set_title('Labelling & Diagnoses')
 
     for a in ax:
         a.axis('off')
