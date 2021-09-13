@@ -27,7 +27,7 @@ def plotImages2(multipleImages):
     plt.subplot(333)
     plt.imshow(cv2.imread(r[2])); plt.axis('off')
     print(r[2])
-    
+
 # cho ảnh đã qua xử lý
 # Get boundingbox 
 def show_vertebral_label(link, size_reduce, percentreduce,percentreuduce2):
@@ -288,7 +288,7 @@ def draw_boxes_label2(filename, filename2, v_boxes, v_labels, v_scores, percentr
         color2 = ImageColor.getcolor(color2, "RGB")
         color2=tuple(reversed(color2))
 
-        #img = cv2.rectangle(img, (x1, y1), (x2, y2), color2, 3)
+        img = cv2.rectangle(img, (x1, y1), (x2, y2), color2, 3)
         radius = 30; thickness = -1; 
         # coordinates
         center_coordinates = (int(0.5*x2 + 0.5*x1), int(0.5*y2 + 0.5*y1))
@@ -322,6 +322,7 @@ def draw_boxes_label2(filename, filename2, v_boxes, v_labels, v_scores, percentr
         (w, h), _ = cv2.getTextSize(
                 label, cv2.FONT_HERSHEY_SIMPLEX, 1.8, 2)
         if v_labels[i]!= "Spine":
+ 
         # Prints the text. 
           img2 = cv2.rectangle(img2, (int(wi/5), center_coordinates[1]-50), (int(wi/5) + w, center_coordinates[1]), color2, -1)
           text_color="#000000"#v_colors[i2]
@@ -329,6 +330,11 @@ def draw_boxes_label2(filename, filename2, v_boxes, v_labels, v_scores, percentr
           text_color2 = complement(*text_color2)
           img2 = cv2.putText(img2, label, (int(wi/5), center_coordinates[1] - 4),  
                               cv2.FONT_HERSHEY_DUPLEX,1.77, text_color2, 2,cv2.LINE_AA)
+          # Object detection # Prints the text. 
+          img = cv2.rectangle(img, (x1, y1-50), (x1 + w, y1), color2, -1)
+          img = cv2.putText(img, label, (x1, y1 - 4),
+                              cv2.FONT_HERSHEY_DUPLEX,1.77, text_color2, 2,cv2.LINE_AA)
+
           # For printing text
           img2 = cv2.putText(img2, label, (int(wi/5), center_coordinates[1]),
                               cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255,255,255), 1)
@@ -369,6 +375,7 @@ def draw_boxes_label2(filename, filename2, v_boxes, v_labels, v_scores, percentr
     #img = cv2.line(img, centralpoint[], 0, (255,255,255), 2)
     #img =cv2.polylines(img,[array2],True,(0,255,255),3)
     cv2.imwrite("result.jpg",img2)
+    cv2.imwrite("preprocess.jpg",img)
     #cv2_imshow(img)
     #fig = plt.figure(figsize=(10, 10))
 
@@ -376,9 +383,9 @@ def draw_boxes_label2(filename, filename2, v_boxes, v_labels, v_scores, percentr
     ax = axes.ravel()
     ax[0].imshow(cv2.imread('somepic.jpg'))
     ax[0].set_title('Original')
-    ax[1].imshow(img)
+    ax[1].imshow(cv2.imread('preprocess.jpg'))
     ax[1].set_title('Object Detection YOLO4')
-    ax[2].imshow(img2)
+    ax[2].imshow(cv2.imread('result.jpg'))
     ax[2].set_title('Labelling & Dignoses')
 
     for a in ax:
