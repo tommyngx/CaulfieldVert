@@ -15,6 +15,19 @@ from PreprocessImage import * #load_image_pixels  # Load image
 from OutputProcess import *
 
 
+def plotImages2(multipleImages):
+    r = random.sample(multipleImages, 3)
+    plt.figure(figsize=(20,20))
+    plt.subplot(331)
+    plt.imshow(cv2.imread(r[0])); plt.axis('off')
+    print(r[0])
+    plt.subplot(332)
+    plt.imshow(cv2.imread(r[1])); plt.axis('off')
+    print(r[1])
+    plt.subplot(333)
+    plt.imshow(cv2.imread(r[2])); plt.axis('off')
+    print(r[2])
+    
 # cho ảnh đã qua xử lý
 # Get boundingbox 
 def show_vertebral_label(link, size_reduce, percentreduce,percentreuduce2):
