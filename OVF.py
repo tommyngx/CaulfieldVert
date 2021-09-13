@@ -381,11 +381,12 @@ def draw_boxes_label2(filename, filename2, v_boxes, v_labels, v_scores, percentr
 
     fig, axes = plt.subplots(nrows=1, ncols=3,sharex=True, sharey=True, figsize=(20, 25))
     ax = axes.ravel()
-    ax[0].imshow(cv2.imread('somepic.jpg'))
+    
+    ax[0].imshow(readrgb('somepic.jpg'))
     ax[0].set_title('Original')
-    ax[1].imshow(cv2.imread('preprocess.jpg'))
+    ax[1].imshow(readrgb('preprocess.jpg'))
     ax[1].set_title('Object Detection YOLO4')
-    ax[2].imshow(cv2.imread('result.jpg'))
+    ax[2].imshow(readrgb('result.jpg'))
     ax[2].set_title('Labelling & Dignoses')
 
     for a in ax:
@@ -396,3 +397,10 @@ def draw_boxes_label2(filename, filename2, v_boxes, v_labels, v_scores, percentr
     #plt.imshow(cv2.cvtColor(cv2.imread("result.jpg"), cv2.COLOR_BGR2RGB))
     #plt.axis('off')
     #plt.show()
+
+
+def readrgb(link):
+      pic = cv2.imread(link)
+      pic = cv2.cvtColor(pic, cv2.COLOR_BGR2RGB)
+      return pic
+
